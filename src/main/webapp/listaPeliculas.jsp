@@ -7,13 +7,12 @@
 <%@page import="java.text.NumberFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    //Job job = (Job) request.getAttribute("job");
     ArrayList<pelicula> listaPeliculas = (ArrayList) request.getAttribute("listaPeliculas");
     ArrayList<genero> listaGeneros = (ArrayList) request.getAttribute("listaGeneros");
     ArrayList<streaming> listaStreaming = (ArrayList) request.getAttribute("listaStreaming");
     String searchTerm = request.getParameter("searchTerm");
-    genero generoSeleccionado = (genero) request.getAttribute("generoSeleccionado");
-    streaming streamingSeleccionado = (streaming) request.getAttribute("streamingSeleccionado");
+    Integer generoSeleccionado = (Integer) request.getAttribute("generoSeleccionado");
+    Integer streamingSeleccionado = (Integer) request.getAttribute("streamingSeleccionado");
     NumberFormat formatter = NumberFormat.getInstance();
 %>
 <!DOCTYPE html>
@@ -26,17 +25,30 @@
 
 <h1>Lista de Películas</h1>
 
-<form action="listaPeliculas" method="POST">
+<form action="listaPeliculas" method="POST" onsubmit="return validarFiltro()">
     <div class="combobox-container">
+        <select name="genero">
+            <option value="" <%= generoSeleccionado == null ? "selected" : "" %>>Seleccione Género</option>
+            <% for (genero gen : listaGeneros) { %>
+            <option value="<%= gen.getIdGenero() %>" <%= generoSeleccionado != null && generoSeleccionado == gen.getIdGenero() ? "selected" : "" %>><%= gen.getNombre() %></option>
+            <% } %>
+        </select>
 
+        <select name="streaming">
+            <option value="" <%= streamingSeleccionado == null ? "selected" : "" %>>Seleccione Streaming</option>
+            <% for (streaming stream : listaStreaming) { %>
+            <option value="<%= stream.getIdStreaming() %>" <%= streamingSeleccionado != null && streamingSeleccionado == stream.getIdStreaming() ? "selected" : "" %>><%= stream.getNombreServicio() %></option>
+            <% } %>
+        </select>
 
         <input type="hidden" name="action" value="filtrar">
         <button type="submit">Filtrar</button>
-        <form action="listaPeliculas?action=listar" method="GET">
-            <button type="submit">Limpiar</button>
-        </form>
     </div>
+</form>
 
+<form action="listaPeliculas" method="GET">
+    <input type="hidden" name="action" value="listar">
+    <button type="submit">Limpiar</button>
 </form>
 
 
@@ -49,6 +61,9 @@
         <th>Rating</th>
         <th>BoxOffice</th>
         <th>Genero</th>
+        <th>Duracion</th>
+        <th>Streaming</th>
+        <th>Premio Oscar</th>
         <th>Actores</th>
         <th>Borrar</th>
 
@@ -63,7 +78,10 @@
         <td><%=movie.getAnoPublicacion()%></td>
         <td><%=movie.getRating()%>/10</td>
         <td>$<%=formatter.format(movie.getBoxOffice())%></td>
-        <td><%=movie.getGenero()%></td>
+        <td><%=movie.getGenero().getNombre()%></td>
+        <td><%=movie.getDuracion()%></td>
+        <td><%=movie.getStreaming().getNombreServicio()%></td>
+        <td><%=movie.isPremioOscar()%></td>
         <td><a href="listaActores?idPelicula=<%= movie.getIdPelicula() %>">Ver Actores</a></td>
         <%
             if (1 == 1) {
@@ -73,12 +91,28 @@
             }
         %>
     </tr>
-
     <%
         }
     %>
 
 </table>
+
+<form action="crearPelicula.jsp" method="GET">
+    <button type="submit">Crear Pelicula</button>
+</form>
+
+<script>
+    function validarFiltro() {
+        var genero = document.forms[0]["genero"].value;
+        var streaming = document.forms[0]["streaming"].value;
+
+        if (genero === "" && streaming === "") {
+            alert("Seleccione un Género o Streaming");
+            return false;
+        }
+        return true;
+    }
+</script>
 
 </body>
 </html>

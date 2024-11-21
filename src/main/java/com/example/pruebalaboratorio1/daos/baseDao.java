@@ -8,11 +8,15 @@ import java.sql.SQLException;
 
 public abstract class baseDao {
 
+    public Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
-
-    public boolean validarBorrado(pelicula movie) {
-        boolean validador = true;
-        return validador;
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb?serverTimezone=America/Lima", "root", "123456");
     }
+
 }
 

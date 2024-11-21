@@ -9,8 +9,8 @@ public class pelicula {
     private int anoPublicacion;
     private Double rating;
     private double boxOffice;
-    private String genero;
-    private String streaming;
+    private genero genero;
+    private streaming streaming;
     private String duracion;
     private boolean premioOscar;
 
@@ -62,19 +62,19 @@ public class pelicula {
         this.boxOffice = boxOffice;
     }
 
-    public String getGenero() {
+    public genero getGenero() {
         return genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(genero genero) {
         this.genero = genero;
     }
 
-    public String getStreaming() {
+    public streaming getStreaming() {
         return streaming;
     }
 
-    public void setStreaming(String streaming) {
+    public void setStreaming(streaming streaming) {
         this.streaming = streaming;
     }
 
@@ -93,9 +93,5 @@ public class pelicula {
     public void setPremioOscar(boolean premioOscar) {
         this.premioOscar = premioOscar;
     }
-
-    // private boolean validadorBorrado;
-
-
 
 }

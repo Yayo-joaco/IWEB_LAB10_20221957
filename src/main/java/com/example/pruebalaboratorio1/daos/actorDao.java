@@ -19,7 +19,7 @@ public class actorDao {
 
         String url = "jdbc:mysql://localhost:3306/mydb?serverTimezone=America/Lima";
         String username = "root";
-        String password = "root";
+        String password = "123456";
 
         try {
             Connection conn = DriverManager.getConnection(url, username, password);
